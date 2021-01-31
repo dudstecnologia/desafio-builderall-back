@@ -23,7 +23,7 @@ class ProductRepository extends BaseRepository
             $product = $this->model->create($request->except(['image']));
 
             $product->update([
-                'image' => UploadService::salvarArquivo($request->image, UploadService::PRODUCTS)
+                'image' => UploadService::saveImageBase64($request->image, UploadService::PRODUCTS)
             ]);
 
             return $product;

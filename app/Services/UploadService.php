@@ -3,18 +3,28 @@
 namespace App\Services;
 
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class UploadService
 {
     const PRODUCTS = 'products';
 
-    public static function salvarArquivo($arquivo, $pasta)
+    public static function saveFile($file, $folder)
     {
-        $nomeNovo = Str::uuid() . "." . $arquivo->getClientOriginalExtension();
+        $newName = Str::uuid() . "." . $file->getClientOriginalExtension();
 
-        $arquivo->storeAs("public/$pasta", $nomeNovo);
+        $file->storeAs("public/$folder", $newName);
 
-        return "$pasta/$nomeNovo";
+        return "$folder/$newName";
+    }
+
+    public static function saveImageBase64($imageBase64, $folder)
+    {
+        $newName = Str::uuid() . ".jpg";
+
+        Storage::disk('public')->put("$folder/$newName", base64_decode($imageBase64));
+
+        return "$folder/$newName";
     }
 
     public static function getUrl($arquivo)
