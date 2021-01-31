@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Services\UploadService;
 
 class Product extends Model
 {
@@ -12,4 +13,13 @@ class Product extends Model
         'quantity',
         'image'
     ];
+
+    protected $appends = [
+        'image_url'
+    ];
+
+    public function getImageUrlAttribute()
+    {
+        return UploadService::getUrl($this->attributes['image']);
+    }
 }
