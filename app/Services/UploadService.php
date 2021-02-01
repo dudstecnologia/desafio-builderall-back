@@ -27,6 +27,11 @@ class UploadService
         return "$folder/$newName";
     }
 
+    public static function deleteFile($file)
+    {
+        Storage::disk('public')->delete($file);
+    }
+
     public static function getUrl($arquivo)
     {
         return url('storage/' . $arquivo);

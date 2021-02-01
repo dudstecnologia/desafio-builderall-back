@@ -28,7 +28,7 @@ class ProductRequest extends FormRequest
             'price' => 'required|integer',
             'quantity' => 'required|integer',
             'currency' => 'required',
-            'image' => 'required'
+            'image' => $this->method() == 'POST' ? 'required' : 'nullable'
         ];
     }
 

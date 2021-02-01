@@ -31,4 +31,25 @@ class ProductRepository extends BaseRepository
             return $this->writeLog($th);
         }
     }
+
+    public function updateProduct($request, $id): ?Model
+    {
+        try {
+            $product = $this->model->find($id);
+
+            $product->update($request->except(['image']));
+
+            if ($request->image) {
+                UploadService::deleteFile($product->image);
+
+                $product->update([
+                    'image' => UploadService::saveImageBase64($request->image, UploadService::PRODUCTS)
+                ]);
+            }
+
+            return $product;
+        } catch (Throwable $th) {
+            return $this->writeLog($th);
+        }
+    }
 }
