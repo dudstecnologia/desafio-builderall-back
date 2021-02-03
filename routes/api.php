@@ -27,20 +27,7 @@ Route::get('list-products', 'ProductController@index');
 Route::get('paypal-clientid', 'PaypalController@clientId');
 
 Route::post('teste', function (Request $req) {
-    $paypal = [
-       'client_id' => 'AYslSDWhVKbc6_eZDSvDSEetXNIMhkxTisg8UBvJopst8LLbg25XRCF9JmuPJ_wkM9lVjYUJ7G_W-Uyn',
-       'secret' => 'EBwbFyDbbMQelNWVq1m-_t5oNk8GguEoFg39uMZVdbrOwKjjVO4SVYL-EMoG0gW0TyyDIc0Q9pjFM8Bb',
-       'settings' => array(
-          'mode' => 'sandbox',
-          'http.ConnectionTimeOut' => 30,
-          'log.LogEnabled' => true,
-          'log.FileName' => storage_path() .
-          '/logs/paypal.log',
-          'log.LogLevel' => 'ERROR'
-         ),
-    ];
-
-   $environment = new SandboxEnvironment($paypal['client_id'], $paypal['secret']);
+   $environment = new SandboxEnvironment('client_id', 'secret');
    $client = new PayPalHttpClient($environment);
 
    $request = new OrdersCreateRequest();
