@@ -46,4 +46,20 @@ class PaypalRepository extends BaseRepository
             return $this->writeLog($th);
         }
     }
+
+    /**
+     * Return paypal client_id
+     *
+     * @return string|null
+     */
+    public function getClientId(): ?string
+    {
+        try {
+            $paypal = $this->model->first();
+
+            return $paypal->client_id;
+        } catch (Throwable $th) {
+            return $this->writeLog($th);
+        }
+    }
 }

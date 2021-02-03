@@ -42,4 +42,18 @@ class PaypalController extends Controller
 
         return response()->json(compact('paypal'));
     }
+
+    /**
+     * Show the paypal client_id
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function clientId()
+    {
+        if (!$client_id = $this->paypalRepository->getClientId()) {
+            return response()->json(['error' => 'Could not get paypal credentials'], 400);
+        }
+
+        return response()->json(compact('client_id'));
+    }
 }
