@@ -10,4 +10,9 @@ class Cart extends Model
         'total',
         'purchase_id'
     ];
+
+    public function cartProducts()
+    {
+    	return $this->hasMany(CartProduct::class);
+    }
 }

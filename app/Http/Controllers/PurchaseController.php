@@ -2,27 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Purchase;
+use App\Services\PurchaseService;
 use Illuminate\Http\Request;
 
 class PurchaseController extends Controller
 {
+    private $purchaseService;
+
+    public function __construct(PurchaseService $purchaseService)
+    {
+        $this->purchaseService = $purchaseService;
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
     {
         //
     }
@@ -35,7 +32,13 @@ class PurchaseController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $purchase = $this->purchaseService->store($request);
+
+        if (!$purchase || is_string($purchase)) {
+            return response()->json(['error' => is_string($purchase) ? $purchase : 'Unable to complete purchase'], 400);
+        }
+
+        return response()->json($purchase);
     }
 
     /**
@@ -44,18 +47,7 @@ class PurchaseController extends Controller
      * @param  \App\Models\Purchase  $purchase
      * @return \Illuminate\Http\Response
      */
-    public function show(Purchase $purchase)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Purchase  $purchase
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Purchase $purchase)
+    public function show($id)
     {
         //
     }
@@ -67,7 +59,7 @@ class PurchaseController extends Controller
      * @param  \App\Models\Purchase  $purchase
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Purchase $purchase)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -78,7 +70,7 @@ class PurchaseController extends Controller
      * @param  \App\Models\Purchase  $purchase
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Purchase $purchase)
+    public function destroy($id)
     {
         //
     }

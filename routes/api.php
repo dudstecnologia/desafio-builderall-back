@@ -25,6 +25,7 @@ Route::middleware('auth:api')->group(function () {
 // Public Routes
 Route::get('list-products', 'ProductController@index');
 Route::get('paypal-clientid', 'PaypalController@clientId');
+Route::post('purchase-store', 'PurchaseController@store');
 
 Route::post('teste', function (Request $req) {
    $environment = new SandboxEnvironment('client_id', 'secret');
