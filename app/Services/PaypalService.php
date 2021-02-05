@@ -25,7 +25,7 @@ class PaypalService
         return new SandboxEnvironment($paypal->client_id, $paypal->secret);
     }
 
-    public function createOrder($total)
+    public function createOrder($total, $purchase)
     {
         $client = new PayPalHttpClient($this->getEnviroment());
 
@@ -34,12 +34,13 @@ class PaypalService
         $request->body = $this->getBody($total);
 
         try {
-            // Call API with your client and get a response for your call
             $response = $client->execute($request);
 
-            // If call returns body in response, you can get the deserialized version from the result attribute of the response
-            // print_r($response);
-            return response()->json($response->result);
+            if ($response->statusCode != 201) return null;
+
+            $purchase->payment()->create(['gateway' => 'paypal', 'transaction_code' => $response->result->id]);
+
+            return $response->result;
         }catch (HttpException $ex) {
             Log::error($ex->getMessage());
             return null;
@@ -52,7 +53,6 @@ class PaypalService
             "intent" => "CAPTURE",
             "purchase_units" => [
                 [
-                //"reference_id" => "test_ref_id1",
                     "amount" => [
                         "value" => $total,
                         "currency_code" => "BRL"

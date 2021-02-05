@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Repositories\PurchaseRepository;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -13,11 +12,16 @@ class PurchaseService
 {
 	private $purchaseRepository;
 	private $cartService;
+	private $paypalService;
 
-    public function __construct(PurchaseRepository $purchaseRepository, CartService $cartService)
+    public function __construct(
+		PurchaseRepository $purchaseRepository,
+		CartService $cartService,
+		PaypalService $paypalService)
     {
         $this->purchaseRepository = $purchaseRepository;
 		$this->cartService = $cartService;
+		$this->paypalService = $paypalService;
     }
 
 	public function store(Request $request)
@@ -35,13 +39,19 @@ class PurchaseService
 
 			if (is_string($total)) return $total;
 
-			dd($total);
+			if (!$order = $this->paypalService->createOrder($total, $purchase)) {
+				return 'Error generating a payment order, please try again.';
+			}
 
 			DB::commit();
-			return $purchase;
+
+			return array(
+				'id' => $order->id
+			);
 		} catch (Throwable $th) {
-			DB::rollBack();
 			Log::error($th->getMessage());
+			DB::rollBack();
+			return null;
 		}
 	}
 }

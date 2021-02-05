@@ -44,6 +44,10 @@ class CartService
 				$product->update(compact('quantity'));
 			}
 
+			$cart->update(compact('total'));
+
+			$total = $total / 100;
+
 			return $total;
 		} catch (Throwable $th) {
 			Log::error($th->getMessage());
