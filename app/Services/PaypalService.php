@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Purchase;
 use App\Repositories\PaymentRepository;
 use App\Repositories\PaypalRepository;
 use Illuminate\Support\Facades\Log;
@@ -78,7 +79,7 @@ class PaypalService
     {
         $payment = $this->paymentRepository->getPaymentByTransactionCode($id);
 
-        $payment->purchase->update(["status" => 2]);
+        $payment->purchase->update(["status" => Purchase::CONCLUIDO]);
     }
 
     private function getBody($total)

@@ -11,6 +11,16 @@ class Purchase extends Model
         'status'
     ];
 
+    const PENDENTE = 0;
+    const PROCESSANDO = 1;
+    const CONCLUIDO = 2;
+
+    const STATUS = [
+        self::PENDENTE => 'Pendente',
+        self::PROCESSANDO => 'Processando',
+        self::CONCLUIDO => 'Concluído'
+    ];
+
     public function cart()
     {
     	return $this->hasOne(Cart::class);

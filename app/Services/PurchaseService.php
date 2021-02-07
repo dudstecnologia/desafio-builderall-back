@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Purchase;
 use App\Repositories\PurchaseRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -29,7 +30,7 @@ class PurchaseService
 		try {
 			DB::beginTransaction();
 
-			if (!$purchase = $this->purchaseRepository->create(['status' => 1])) {
+			if (!$purchase = $this->purchaseRepository->create(['status' => Purchase::PROCESSANDO])) {
 				return null;
 			}
 
