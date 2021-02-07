@@ -2,16 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\PaypalService;
 use App\Services\PurchaseService;
 use Illuminate\Http\Request;
 
 class PurchaseController extends Controller
 {
     private $purchaseService;
+    private $paypalService;
 
-    public function __construct(PurchaseService $purchaseService)
+    public function __construct(PurchaseService $purchaseService, PaypalService $paypalService)
     {
         $this->purchaseService = $purchaseService;
+        $this->paypalService = $paypalService;
     }
 
     /**
@@ -47,31 +50,15 @@ class PurchaseController extends Controller
      * @param  \App\Models\Purchase  $purchase
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function captureOrder($id)
     {
-        //
-    }
+        // if (!$capture = $this->paypalService->captureOrder($id)) {
+        //     return response()->json([], 400);
+        // }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Purchase  $purchase
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+        // return response()->json($capture);
+        $capture = $this->paypalService->captureOrder($id);
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Purchase  $purchase
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return response()->json($capture);
     }
 }

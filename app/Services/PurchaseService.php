@@ -29,7 +29,7 @@ class PurchaseService
 		try {
 			DB::beginTransaction();
 
-			if (!$purchase = $this->purchaseRepository->create(['status' => 0])) {
+			if (!$purchase = $this->purchaseRepository->create(['status' => 1])) {
 				return null;
 			}
 
@@ -45,12 +45,11 @@ class PurchaseService
 
 			DB::commit();
 
-			return array(
-				'id' => $order->id
-			);
+			return $order;
 		} catch (Throwable $th) {
 			Log::error($th->getMessage());
 			DB::rollBack();
+
 			return null;
 		}
 	}

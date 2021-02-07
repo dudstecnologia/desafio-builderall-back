@@ -13,9 +13,9 @@ class PaypalRepository extends BaseRepository
     /**
      * Return paypal data
      *
-     * @return model|null
+     * @return Model|null
      */
-    public function getPaypalConfig(): ?model
+    public function getPaypalConfig(): ?Model
     {
         try {
             return $this->model->first();

@@ -11,4 +11,9 @@ class Payment extends Model
         'transaction_code',
         'purchase_id'
     ];
+
+    public function purchase()
+    {
+        return $this->belongsTo(Purchase::class);
+    }
 }
