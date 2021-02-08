@@ -13,11 +13,19 @@ class PurchaseRepository extends BaseRepository
 	public function getPurchaseListByPeriod($request)
 	{
 		try {
-			$start = Carbon::parse($request->start);
-			$end = Carbon::parse($request->end)->addDay();
+			$start = Carbon::createFromFormat('d/m/Y H:i:s', "$request->start 00:00:00");
+			$end = Carbon::createFromFormat('d/m/Y H:i:s', "$request->end 00:00:00")->addDay();
 
-            return $this->model->whereBetween('created_at', [$start, $end])
-				->orderBy('id', 'desc')
+            return $this->model->select(
+					'purchases.id',
+					'purchases.buyer_email as email',
+					'purchases.status',
+					'carts.total',
+					'purchases.created_at'
+				)
+				->join('carts', 'carts.purchase_id', 'purchases.id')
+				->whereBetween('purchases.created_at', [$start, $end])
+				->orderBy('purchases.id', 'desc')
 				->get();
         } catch (Throwable $th) {
             return $this->writeLog($th);
