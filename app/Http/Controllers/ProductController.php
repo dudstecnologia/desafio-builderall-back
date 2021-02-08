@@ -7,14 +7,17 @@ use App\Repositories\ProductRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Http\Requests\ProductRequest;
+use App\Repositories\CartProductRepository;
 
 class ProductController extends Controller
 {
     private $productRepository;
+    private $cartProductRepository;
 
-    public function __construct(ProductRepository $productRepository)
+    public function __construct(ProductRepository $productRepository, CartProductRepository $cartProductRepository)
     {
         $this->productRepository = $productRepository;
+        $this->cartProductRepository = $cartProductRepository;
     }
 
     /**
@@ -88,5 +91,14 @@ class ProductController extends Controller
         if (!$this->productRepository->destroy($id)) {
             return response()->json(['error' => 'The product could not be removed'], 400);
         }
+    }
+
+    public function topSellingProducts()
+    {
+        if (!$products = $this->cartProductRepository->getTopSellingProducts()) {
+            return response()->json([]);
+        }
+
+        return response()->json(compact('products'));
     }
 }
