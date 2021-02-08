@@ -13,6 +13,7 @@ Route::middleware('auth:api')->group(function () {
     Route::resource('products', 'ProductController');
     Route::resource('paypals', 'PaypalController')->only(['index', 'store']);
     Route::get('top-selling-products', 'ProductController@topSellingProducts');
+    Route::post('purchase-list-period', 'PurchaseController@purchaseListByPeriod');
 });
 
 // Public Routes

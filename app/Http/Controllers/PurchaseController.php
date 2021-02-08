@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\PurchaseRepository;
 use App\Services\PaypalService;
 use App\Services\PurchaseService;
 use Illuminate\Http\Request;
@@ -10,11 +11,16 @@ class PurchaseController extends Controller
 {
     private $purchaseService;
     private $paypalService;
+    private $purchaseRepository;
 
-    public function __construct(PurchaseService $purchaseService, PaypalService $paypalService)
+    public function __construct(
+        PurchaseService $purchaseService,
+        PaypalService $paypalService,
+        PurchaseRepository $purchaseRepository)
     {
         $this->purchaseService = $purchaseService;
         $this->paypalService = $paypalService;
+        $this->purchaseRepository = $purchaseRepository;
     }
 
     /**
@@ -52,13 +58,17 @@ class PurchaseController extends Controller
      */
     public function captureOrder($id)
     {
-        // if (!$capture = $this->paypalService->captureOrder($id)) {
-        //     return response()->json([], 400);
-        // }
-
-        // return response()->json($capture);
         $capture = $this->paypalService->captureOrder($id);
 
         return response()->json($capture);
+    }
+
+    public function purchaseListByPeriod(Request $request)
+    {
+        if (!$purchase = $this->purchaseRepository->getPurchaseListByPeriod($request)) {
+            return response()->json([], 400);
+        }
+
+        return response()->json(compact('purchase'));
     }
 }
