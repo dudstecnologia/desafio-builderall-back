@@ -65,7 +65,7 @@ class PaypalService
             if ($response->statusCode != 201) return null;
 
             if ($response->result->status == "COMPLETED") {
-                $this->updatePurchaseStatus($id);
+                $this->updatePurchaseStatus($id, $response->result);
             }
 
             return $response->result;
@@ -75,11 +75,14 @@ class PaypalService
         }
     }
 
-    private function updatePurchaseStatus($id)
+    private function updatePurchaseStatus($id, $result)
     {
         $payment = $this->paymentRepository->getPaymentByTransactionCode($id);
 
-        $payment->purchase->update(["status" => Purchase::CONCLUIDO]);
+        $payment->purchase->update([
+            "buyer_email" => $result->payer->email_address,
+            "status" => Purchase::CONCLUIDO
+        ]);
     }
 
     private function getBody($total)
