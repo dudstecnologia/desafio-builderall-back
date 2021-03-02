@@ -9,6 +9,9 @@ Tecnologias:
 * Frontend: SPA em Vue 2.5/3
 * Backend: Api Laravel
 
+Demonstração:
+https://youtu.be/qWuhB6DEaNY
+
 ## Clone o projeto
 ```
 git clone https://github.com/dudstecnologia/desafio-builderall-back.git
